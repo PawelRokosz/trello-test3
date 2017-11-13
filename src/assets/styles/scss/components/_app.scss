@@ -1,0 +1,81 @@
+.board-title {
+  width: 200px;
+  padding: 5px;
+  border-radius: 3px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.12);
+  }
+}
+
+.boards {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+
+  &__board {
+    position: relative;
+    width: 300px;
+    height: 500px;
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 3px;
+    background-color: $secondaryColor;
+    cursor: pointer;
+  }
+
+  &__tasks {
+    margin-top: 10px;
+  }
+
+  &__task {
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+    background: white;
+    box-shadow: 1px 1px 1px 0px rgba(112,108,112,1);
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &__add-task {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 8px;
+    color: #838c91;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #CDD2D4;
+      text-decoration: underline;
+    }
+  }
+}
+
+.drag {
+
+}
+
+.over {
+  transform: scale(1.1);
+}
+
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}

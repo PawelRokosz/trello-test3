@@ -1,0 +1,7 @@
+@mixin respond-at-width($media) {
+  @media only screen and (max-width: $media){ @content; }
+}
+
+@mixin respond-at-height($media) {
+  @media only screen and (max-height: $media){ @content; }
+}
