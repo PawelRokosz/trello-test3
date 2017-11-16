@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import data from './data/data.js';
+import Tasks from './Tasks.js';
 
 class Boards extends Component {
   constructor(props) {
@@ -8,13 +9,15 @@ class Boards extends Component {
     this.state = {
       data: data,
       startBoard: null,
-      endBoard: null
+      endBoard: null,
+      startTask: null,
+      endTask: null,
+      startTaskBoard: null
     }
   }
 
   handleDragStart(e) {
     let startBoard = e.target.getAttribute('index');
-    console.log('startBoard', startBoard)
     this.setState({
       startBoard: startBoard
     })
@@ -22,7 +25,6 @@ class Boards extends Component {
 
   handleDragEnter(e) {
     let endBoard = e.target.getAttribute('index');
-    console.log('endBoard', endBoard)
     this.setState({
       endBoard: endBoard
     })
@@ -60,6 +62,50 @@ class Boards extends Component {
     }
   }
 
+  handleDragStartTask(startTask, board) {
+    this.setState({
+      startTask: startTask,
+      startTaskBoard: board
+    })
+  }
+
+  handleDragEnterTask(endTask) {
+    this.setState({
+      endTask: endTask
+    })
+  }
+
+  handleDragLeaveTask() {
+    this.setState({
+      endTask: null
+    })
+  }
+
+  handleDropTask(board) {
+    let startTask = this.state.startTask;
+    let endTask = this.state.endTask;
+    let startTaskBoard = this.state.startTaskBoard;
+    let endTaskBoard = board;
+    let data = this.state.data;
+
+    let newData = data.slice();
+
+    let startTaskSuper = newData[newData.indexOf(startTaskBoard)].tasks.find(task => {
+      return task.id === parseInt(startTask);
+    })
+
+    let endTaskSuper = newData[newData.indexOf(endTaskBoard)].tasks.find(task => {
+      return task.id === parseInt(endTask);
+    })
+
+    newData[data.indexOf(startTaskBoard)].tasks.splice(startTaskSuper, 1, endTaskSuper);
+    newData[data.indexOf(endTaskBoard)].tasks.splice(endTaskSuper, 1, startTaskSuper);
+
+    this.setState({
+      data: newData
+    })
+  }
+
   render() {
     return (
       <div className="boards">
@@ -72,6 +118,13 @@ class Boards extends Component {
                   onDrop={() => this.handleDrop()}
                   >
                   {board.board}
+
+                  <Tasks tasks={board.tasks}
+                         handleDragStart={(startTask) => this.handleDragStartTask(startTask, board)}
+                         handleDragEnter={(endTask) => this.handleDragEnterTask(endTask)}
+                         handleDragLeave={() => this.handleDragLeaveTask()}
+                         handleDrop={() => this.handleDropTask(board)}/>
+
                  </div>
         })}
       </div>

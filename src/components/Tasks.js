@@ -1,40 +1,45 @@
 import React, { Component } from 'react';
 
-import Task from './Task';
-import EmptyTasks from './EmptyTasks';
-
 class Tasks extends Component {
-  handleDragStart(id, myTask) {
-    this.props.handleDragStart(id, myTask);
+  handleDragStart(e) {
+    let startTask = e.target.getAttribute('id');
+    this.props.handleDragStart(startTask);
   }
 
-  handleDrop(id, myTask) {
-    this.props.handleDrop(id, myTask);
+  handleDragEnter(e) {
+    let endTask = e.target.getAttribute('id');
+    this.props.handleDragEnter(endTask);
   }
 
-  handleDragEnd() {
-    this.props.handleDragEnd();
+  handleDragLeave() {
+    this.props.handleDragLeave();
+  }
+
+  handleDragOver(e) {
+    e.preventDefault();
+  }
+
+  handleDrop() {
+    this.props.handleDrop();
   }
 
   render() {
     let tasks = this.props.tasks;
-    let taskSpace = this.props.taskSpace;
-
-    console.log(tasks, taskSpace);
-
-    let newTasks = tasks.map((task, index) => {
-      let id = tasks[index].id;
-      let myTask = task.task
-      return <Task key={index} id={id} task={myTask} handleDragEnd={() => this.handleDragEnd()} handleDragStart={() => this.handleDragStart(id, myTask)} handleDrop={() => this.handleDrop(id, myTask)}/>
-    });
-
     return (
-      <div className="lists__tasks">
-
-        
-
+      <div className="boards__tasks">
+        {tasks.map((task, index) => {
+          return <div className="boards__task" key={`${task.task}${index}`} id={task.id} draggable
+                  onDragStart={(e) => this.handleDragStart(e)}
+                  onDragEnter={(e) =>  this.handleDragEnter(e)}
+                  onDragLeave={() => this.handleDragLeave()}
+                  onDragOver={(e) => this.handleDragOver(e)}
+                  onDrop={() => this.handleDrop()}
+                  >
+                  {task.task}
+                 </div>
+        })}
       </div>
-    );
+    )
   }
 }
 
