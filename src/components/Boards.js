@@ -90,16 +90,16 @@ class Boards extends Component {
 
     let newData = data.slice();
 
-    let startTaskSuper = newData[newData.indexOf(startTaskBoard)].tasks.find(task => {
+    let startTaskSuper = startTaskBoard.tasks.find(task => {
       return task.id === parseInt(startTask);
     })
 
-    let endTaskSuper = newData[newData.indexOf(endTaskBoard)].tasks.find(task => {
+    let endTaskSuper = endTaskBoard.tasks.find(task => {
       return task.id === parseInt(endTask);
     })
 
-    newData[data.indexOf(startTaskBoard)].tasks.splice(startTaskSuper, 1, endTaskSuper);
-    newData[data.indexOf(endTaskBoard)].tasks.splice(endTaskSuper, 1, startTaskSuper);
+    startTaskBoard.tasks.splice(startTaskSuper, 1, endTaskSuper);
+    endTaskBoard.tasks.splice(endTaskSuper, 1, startTaskSuper);
 
     this.setState({
       data: newData
