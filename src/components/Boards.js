@@ -88,8 +88,6 @@ class Boards extends Component {
     let endTaskBoard = board;
     let data = this.state.data;
 
-    let newData = data.slice();
-
     let startTaskSuper = startTaskBoard.tasks.find(task => {
       return task.id === parseInt(startTask);
     })
@@ -98,8 +96,11 @@ class Boards extends Component {
       return task.id === parseInt(endTask);
     })
 
-    startTaskBoard.tasks.splice(startTaskSuper, 1, endTaskSuper);
-    endTaskBoard.tasks.splice(endTaskSuper, 1, startTaskSuper);
+    let newData = data.slice();
+
+    newData[newData.indexOf(endTaskBoard)].tasks.splice(endTaskSuper, 1, startTaskSuper);
+    newData[newData.indexOf(startTaskBoard)].tasks.splice(startTaskSuper, 1, endTaskSuper);
+
 
     this.setState({
       data: newData
