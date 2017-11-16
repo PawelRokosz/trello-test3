@@ -56,10 +56,6 @@ class Boards extends Component {
       newData.splice(data.indexOf(dataBoardStart), 1, dataBoardEnd);
       newData.splice(data.indexOf(dataBoardEnd), 1, dataBoardStart);
 
-      // this.setState({
-      //   data: newData
-      // })
-
       this.setState({
         data: newData
       })
@@ -102,8 +98,8 @@ class Boards extends Component {
 
     let newData = data.slice();
 
-    newData[newData.indexOf(endTaskBoard)].tasks.splice(endTaskBoard.tasks.indexOf(endTaskSuper), 1, startTaskSuper);
-    newData[newData.indexOf(startTaskBoard)].tasks.splice(startTaskBoard.tasks.indexOf(startTaskSuper), 1, endTaskSuper);
+    startTaskBoard.tasks.splice(startTaskBoard.tasks.indexOf(startTaskSuper), 1, endTaskSuper);
+    endTaskBoard.tasks.splice(endTaskBoard.tasks.indexOf(endTaskSuper), 1, startTaskSuper);
 
     this.setState({
       data: newData
