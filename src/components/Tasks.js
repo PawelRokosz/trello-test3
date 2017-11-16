@@ -24,6 +24,7 @@ class Tasks extends Component {
   }
 
   render() {
+    const {handleClick} = this.props;
     let tasks = this.props.tasks;
     return (
       <div className="boards__tasks">
@@ -34,6 +35,7 @@ class Tasks extends Component {
                   onDragLeave={() => this.handleDragLeave()}
                   onDragOver={(e) => this.handleDragOver(e)}
                   onDrop={() => this.handleDrop()}
+                  onClick={handleClick}
                   >
                   {task.task}
                  </div>

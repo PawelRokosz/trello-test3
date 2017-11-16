@@ -56,9 +56,9 @@ class Boards extends Component {
       newData.splice(data.indexOf(dataBoardStart), 1, dataBoardEnd);
       newData.splice(data.indexOf(dataBoardEnd), 1, dataBoardStart);
 
-      this.setState({
-        data: newData
-      })
+      this.setState((previousState) => {
+        return {...previousState, data: newData};
+      });
     }
   }
 
@@ -88,22 +88,32 @@ class Boards extends Component {
     let endTaskBoard = board;
     let data = this.state.data;
 
-    let startTaskSuper = startTaskBoard.tasks.find(task => {
-      return task.id === parseInt(startTask);
-    })
+    if (startTaskBoard && endTaskBoard) {
+      let startTaskSuper = startTaskBoard.tasks.find(task => {
+        return task.id === parseInt(startTask);
+      })
 
-    let endTaskSuper = endTaskBoard.tasks.find(task => {
-      return task.id === parseInt(endTask);
-    })
+      let endTaskSuper = endTaskBoard.tasks.find(task => {
+        return task.id === parseInt(endTask);
+      })
 
-    let newData = data.slice();
+      let newData = data.slice();
 
-    startTaskBoard.tasks.splice(startTaskBoard.tasks.indexOf(startTaskSuper), 1, endTaskSuper);
-    endTaskBoard.tasks.splice(endTaskBoard.tasks.indexOf(endTaskSuper), 1, startTaskSuper);
+      // if (startTaskBoard.board !== endTaskBoard.board) {
+      //   endTaskBoard.tasks.push(startTaskBoard.tasks[startTaskBoard.tasks.indexOf(startTaskSuper)]);
+      // }
+      
+      newData[data.indexOf(startTaskBoard)].tasks.splice(data[data.indexOf(startTaskBoard)].tasks.indexOf(startTaskSuper), 1, endTaskSuper);
+      newData[data.indexOf(endTaskBoard)].tasks.splice(data[data.indexOf(endTaskBoard)].tasks.indexOf(endTaskSuper), 1, startTaskSuper);
 
-    this.setState({
-      data: newData
-    })
+      this.setState((previousState) => {
+        return {...previousState, data: newData};
+      });
+    }
+  }
+
+  handleClick() {
+    alert('Super!');
   }
 
   render() {
@@ -123,7 +133,9 @@ class Boards extends Component {
                          handleDragStart={(startTask) => this.handleDragStartTask(startTask, board)}
                          handleDragEnter={(endTask) => this.handleDragEnterTask(endTask)}
                          handleDragLeave={() => this.handleDragLeaveTask()}
-                         handleDrop={() => this.handleDropTask(board)}/>
+                         handleDrop={() => this.handleDropTask(board)}
+                         handleClick={() => this.handleClick()}
+                      />
 
                  </div>
         })}
