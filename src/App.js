@@ -31,35 +31,37 @@ class App extends Component {
   handleDrop() {
     const {data, startPoint, endPoint} = this.state;
 
-    let startBoard = data[startPoint.getAttribute('index')];
-    let endBoard = data[endPoint.getAttribute('index')];
-
-    let startTaskBoard = data.find(board => {
-      return board.board === startPoint.getAttribute('board');
-    })
-
-    let endTaskBoard = data.find(board => {
-      return board.board === endPoint.getAttribute('board');
-    })
-
-    let startTask = startTaskBoard.tasks.find(task => {
-      return task.id === parseInt(startPoint.getAttribute('id'));
-    })
-
-    let endTask = endTaskBoard.tasks.find(task => {
-      return task.id === parseInt(endPoint.getAttribute('id'));
-    })
-
     let newData = data.slice();
 
     if (startPoint.getAttribute('type') === 'board' && endPoint.getAttribute('type') === 'board') {
+      let startBoard = data[startPoint.getAttribute('index')];
+      let endBoard = data[endPoint.getAttribute('index')];
+
       newData.splice(data.indexOf(startBoard), 1, endBoard);
       newData.splice(data.indexOf(endBoard), 1, startBoard);
     }
 
     if (startPoint.getAttribute('type') === 'task' && endPoint.getAttribute('type') === 'task') {
-      newData[data.indexOf(startTaskBoard)].tasks.splice(startTaskBoard.tasks.indexOf(startTask), 1, endTask);
-      newData[data.indexOf(endTaskBoard)].tasks.splice(endTaskBoard.tasks.indexOf(endTask), 1, startTask);
+      let startTaskBoard = data.find(board => {
+        return board.board === startPoint.getAttribute('board');
+      })
+
+      let endTaskBoard = data.find(board => {
+        return board.board === endPoint.getAttribute('board');
+      })
+
+      let startTask = startTaskBoard.tasks.find(task => {
+        return task.id === parseInt(startPoint.getAttribute('id'));
+      })
+
+      let endTask = endTaskBoard.tasks.find(task => {
+        return task.id === parseInt(endPoint.getAttribute('id'));
+      })
+
+      if (startTask && endTask) {
+        newData[data.indexOf(startTaskBoard)].tasks.splice(startTaskBoard.tasks.indexOf(startTask), 1, endTask);
+        newData[data.indexOf(endTaskBoard)].tasks.splice(endTaskBoard.tasks.indexOf(endTask), 1, startTask);
+      }
     }
 
     this.setState((previousState) => {
