@@ -2,7 +2,7 @@ import React from 'react';
 
 import Tasks from './Tasks.js';
 
-const Boards = ({data, handleDragStart, handleDragEnter, handleDragLeave, handleDragOver, handleDrop}) => {
+const Boards = ({data, handleDragStart, handleDragEnter, handleDragOver, handleDrop}) => {
   return (
     <div className="boards">
       {data.map((board, index) => {

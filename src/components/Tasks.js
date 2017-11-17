@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Tasks = ({tasks, board,  handleDragStart, handleDragEnter, handleDragLeave, handleDragOver, handleDrop}) => {
+const Tasks = ({tasks, board,  handleDragStart, handleDragEnter, handleDragOver, handleDrop}) => {
   return (
     <div className="boards__tasks">
       {tasks.map((task, index) => {
