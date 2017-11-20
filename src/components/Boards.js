@@ -2,23 +2,21 @@ import React from 'react';
 
 import Tasks from './Tasks.js';
 
-const Boards = ({data, handleDragStart, handleDragEnter, handleDragOver, handleDrop}) => {
+const Boards = ({data, handleDragOver, handleBoardDragStart, handleBoardDrop, handleTaskDragStart, handleTaskDrop }) => {
   return (
     <div className="boards">
       {data.map((board, index) => {
-        return <div className="boards__board" key={`${board.board}${index}`} index={index} type="board" draggable
-                onDragStart={handleDragStart}
-                onDragEnter={handleDragEnter}
+        return <div className="boards__board" key={`${board.board}${index}`} draggable
+                onDragStart={handleBoardDragStart(index)}
                 onDragOver={handleDragOver}
-                onDrop={handleDrop}
+                onDrop={handleBoardDrop(index)}
                 >
                 {board.board}
 
                 <Tasks tasks={board.tasks} board={board.board}
-                  handleDragStart={handleDragStart}
-                  handleDragEnter={handleDragEnter}
+                  handleTaskDragStart={handleTaskDragStart}
+                  handleTaskDrop={handleTaskDrop}
                   handleDragOver={handleDragOver}
-                  handleDrop={handleDrop}
                 />
 
                </div>

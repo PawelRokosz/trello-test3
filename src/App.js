@@ -9,60 +9,78 @@ class App extends Component {
     super(props);
       this.state = {
         data: null,
-        startPoint: null,
-        endPoint: null
+        startBoardIndex: null,
+        startTaskId: null,
+        startTaskIndex: null,
+        startTaskBoard: null
       }
   }
 
-  handleDragStart(e) {
-    let startPoint = e.target;
-    this.setState({ startPoint })
-  }
-
-  handleDragEnter(e) {
-    let endPoint = e.target;
-    this.setState({ endPoint })
-  }
-
-  handleDragOver(e) {
+  handleDragOver = (e) => {
     e.preventDefault();
   }
 
-  handleDrop() {
-    const {data, startPoint, endPoint} = this.state;
+  handleBoardDragStart = index => (e) => {
+    e.stopPropagation()
+    this.setState({ startBoardIndex: index })
+  }
+
+  handleBoardDrop = index => (e) => {
+    e.stopPropagation()
+    const { startBoardIndex, data } = this.state
+
+    const startBoard = data[startBoardIndex]
+
+    let newData = data.slice()
+
+    newData.splice(startBoardIndex, 1)
+
+    newData = [
+      ...newData.slice(0, index),
+      startBoard,
+      ...newData.slice(index)
+    ]
+
+    this.setState((previousState) => {
+      return {...previousState, data: newData};
+    });  }
+
+  handleTaskDragStart = (id, board, index) => (e) => {
+    e.stopPropagation()
+    const { data } = this.state
+
+    const startTaskBoard = data.find(boards => {
+      return boards.board === board;
+    })
+
+    this.setState({
+      startTaskId: id,
+      startTaskIndex: index,
+      startTaskBoard
+    })
+  }
+
+  handleTaskDrop = (id, board, index) => (e) => {
+    e.stopPropagation()
+    const { startTaskId, startTaskIndex, startTaskBoard, data } = this.state
 
     let newData = data.slice();
 
-    if (startPoint.getAttribute('type') === 'board' && endPoint.getAttribute('type') === 'board') {
-      let startBoard = data[startPoint.getAttribute('index')];
-      let endBoard = data[endPoint.getAttribute('index')];
+    let endTaskBoard = newData.find(boards => {
+      return boards.board === board;
+    })
 
-      newData.splice(data.indexOf(startBoard), 1, endBoard);
-      newData.splice(data.indexOf(endBoard), 1, startBoard);
-    }
+    const startTask = startTaskBoard.tasks.find(task => {
+      return task.id === startTaskId;
+    })
 
-    if (startPoint.getAttribute('type') === 'task' && endPoint.getAttribute('type') === 'task') {
-      let startTaskBoard = data.find(board => {
-        return board.board === startPoint.getAttribute('board');
-      })
+    newData[newData.indexOf(startTaskBoard)].tasks.splice(startTaskIndex, 1);
 
-      let endTaskBoard = data.find(board => {
-        return board.board === endPoint.getAttribute('board');
-      })
-
-      let startTask = startTaskBoard.tasks.find(task => {
-        return task.id === parseInt(startPoint.getAttribute('id'));
-      })
-
-      let endTask = endTaskBoard.tasks.find(task => {
-        return task.id === parseInt(endPoint.getAttribute('id'));
-      })
-
-      if (startTask && endTask) {
-        newData[data.indexOf(startTaskBoard)].tasks.splice(startTaskBoard.tasks.indexOf(startTask), 1, endTask);
-        newData[data.indexOf(endTaskBoard)].tasks.splice(endTaskBoard.tasks.indexOf(endTask), 1, startTask);
-      }
-    }
+    endTaskBoard.tasks = [
+      ...endTaskBoard.tasks.slice(0, index),
+      startTask,
+      ...endTaskBoard.tasks.slice(index)
+    ]
 
     this.setState((previousState) => {
       return {...previousState, data: newData};
@@ -81,10 +99,11 @@ class App extends Component {
 
         <Boards
           data={data}
-          handleDragStart={(e) => this.handleDragStart(e)}
-          handleDragEnter={(e) => this.handleDragEnter(e)}
-          handleDragOver={(e) => this.handleDragOver(e)}
-          handleDrop={() => this.handleDrop()}
+          handleBoardDragStart={this.handleBoardDragStart}
+          handleBoardDrop={this.handleBoardDrop}
+          handleDragOver={this.handleDragOver}
+          handleTaskDragStart={this.handleTaskDragStart}
+          handleTaskDrop={this.handleTaskDrop}
         />
 
   		</div>

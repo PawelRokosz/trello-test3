@@ -1,14 +1,13 @@
 import React from 'react';
 
-const Tasks = ({tasks, board,  handleDragStart, handleDragEnter, handleDragOver, handleDrop}) => {
+const Tasks = ({tasks, board, handleDragOver, handleTaskDragStart, handleTaskDrop}) => {
   return (
     <div className="boards__tasks">
       {tasks.map((task, index) => {
-        return <div className="boards__task" key={`${task.task}${index}`} id={task.id} board={board} type="task" draggable
-                onDragStart={handleDragStart}
-                onDragEnter={handleDragEnter}
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
+        return <div className="boards__task" key={`${task.id}${index}`} draggable
+                  onDragStart={handleTaskDragStart(task.id, board, index)}
+                  onDragOver={handleDragOver}
+                  onDrop={handleTaskDrop(task.id, board, index)}
                 >
                 {task.task}
                </div>
