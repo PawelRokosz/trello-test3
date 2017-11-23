@@ -31,6 +31,10 @@ class App extends Component {
 
     const startBoard = data[startBoardIndex]
 
+    if (startBoard === undefined) {
+      return;
+    }
+
     let newData = data.slice()
 
     newData.splice(startBoardIndex, 1)
@@ -43,7 +47,8 @@ class App extends Component {
 
     this.setState((previousState) => {
       return {...previousState, data: newData};
-    });  }
+    })
+  }
 
   handleTaskDragStart = (id, board, index) => (e) => {
     e.stopPropagation()
